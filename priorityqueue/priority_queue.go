@@ -6,12 +6,16 @@ type PriorityQueue struct {
 	function func(elem1 interface{}, elem2 interface{}) bool
 }
 
-func NewPriorityQueue(length int, function func(elem1 interface{}, elem2 interface{}) bool) *PriorityQueue {
-	return &PriorityQueue{
-		heap:     make([]interface{}, length),
-		last:     -1,
+func NewPriorityQueue(heap []interface{}, length int, function func(elem1 interface{}, elem2 interface{}) bool) *PriorityQueue {
+	heapCopy := make([]interface{}, len(heap)+length)
+	copy(heapCopy, heap)
+	pq := &PriorityQueue{
+		heap:     heapCopy,
+		last:     len(heap) - 1,
 		function: function,
 	}
+	pq.heapify()
+	return pq
 }
 
 func (pq *PriorityQueue) Push(elem interface{}) {
@@ -33,6 +37,12 @@ func (pq *PriorityQueue) Pop() interface{} {
 	pq.last--
 	pq.moveDown(0)
 	return pop
+}
+
+func (pq *PriorityQueue) heapify() {
+	for start := (pq.last - 1) / 2; start >= 0; start-- {
+		pq.moveDown(start)
+	}
 }
 
 func (pq *PriorityQueue) moveDown(start int) {

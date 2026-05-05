@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	minHeap := priorityqueue.NewPriorityQueue(0, func(a, b interface{}) bool {
+	minHeap := priorityqueue.NewPriorityQueue([]interface{}{4, 3, 2, 1}, 0, func(a, b interface{}) bool {
 		return a.(int) < b.(int)
 	})
 
